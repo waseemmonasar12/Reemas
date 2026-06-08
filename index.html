@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كتاب الحب الأبدي - ريماس & وسيم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            background: radial-gradient(circle at center, #1f0000 0%, #000000 90%); 
+            color: #ffffff; 
+            font-family: 'Amiri', serif; 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow: hidden; 
+        }
+        
+        .book-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .page { 
+            display: none; 
+            animation: pageFlip 0.8s ease-in-out forwards; 
+        }
+        
+        .active { display: block; }
+        
+        /* جرافيكس القلوب الفاخرة والحبل الرابط */
+        .heart-container { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            position: relative;
+        }
+
+        .rope { 
+            width: 80px; 
+            height: 4px; 
+            background: linear-gradient(90deg, #666, #ccc, #666); 
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+            margin: 0 -20px;
+            z-index: 1;
+        }
+
+        .heart-wrapper { 
+            position: relative; 
+            width: 100px; 
+            height: 95px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 2;
+            animation: pulse 2.5s infinite ease-in-out;
+        }
+        
+        .heart-wrapper:nth-child(3) { animation-delay: 0.6s; }
+
+        .svg-heart { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            fill: #8B0000; /* أحمر داكن ملكي */
+            filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.8)); 
+            z-index: 1;
+        }
+
+        .name-text { 
+            position: relative; 
+            z-index: 3; 
+            color: #ffffff; 
+            font-family: 'Cairo', sans-serif;
+            font-weight: 800; 
+            font-size: 18px; 
+            margin-top: -10px; 
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+        }
+        
+        /* تنسيقات النصوص والتعبيرات */
+        h1 { 
+            font-family: 'Cairo', sans-serif;
+            font-size: 26px; 
+            color: #ffcccc;
+            margin-bottom: 15px; 
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.6); 
+        }
+        
+        .content-text { 
+            color: #f8f8f8; 
+            font-size: 20px; 
+            line-height: 1.8; 
+            margin: 15px 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .poem-text {
+            font-style: italic;
+            color: #ffb3b3;
+            font-size: 22px;
+            line-height: 2;
+            border-right: 4px solid #8B0000;
+            border-left: 4px solid #8B0000;
+            padding: 10px 20px;
+            margin: 15px auto;
+            max-width: 90%;
+            background: rgba(139, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        .page-number {
+            font-size: 16px;
+            color: #999;
+            margin-top: 15px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* أزرار التحكم والتقليب */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        button { 
+            background: linear-gradient(135deg, #8B0000 0%, #4a0000 100%); 
+            color: white; 
+            border: 1px solid #ff4d4d; 
+            padding: 12px 25px; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px; 
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
+        }
+        button:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px #ff0000;
+        }
+        button:active { transform: scale(0.95); }
+
+        /* تأثيرات الحركة والتقليب */
+        @keyframes pageFlip {
+            from { opacity: 0; transform: rotateY(-20deg) scale(0.9); filter: blur(5px); }
+            to { opacity: 1; transform: rotateY(0deg) scale(1); filter: blur(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book-container">
+        <div id="pages-container"></div>
+    </div>
+
+    <script>
+        const pagesData = [
+            {
+                title: "بِدَايَةُ الحِكَايَة",
+                content: "هنا تُكتب حكايتنا الحقيقية، بين نبضة ونبضة. وفي كل صفحة نروي قصة حب لا تطويها الأيام، قصة تبدأ بكِ وتنتهي إليكِ.",
+                type: "text",
+                btnNext: "افتح كتاب الحب 📖"
+            },
+            {
+                title: "مَكَانَتُكِ فِي قَلْبِي",
+                content: "لو كان القلب يُهدى لأهديتكِ قلبي، ولكنه ملككِ منذ أول نبضة وعيتُ فيها وجودكِ. ريماس، أنتِ لستِ مجرد شخص عابر، أنتِ كل أجزاء حياتي.",
+                type: "text"
+            },
+            {
+                title: "مَنْ أَنْتِ لِي؟",
+                content: "أنتِ الحلم الذي طال انتظاره وتحقق، والوطن الدافئ الذي ألجأ إليه. حين ألتفت وأجدكِ معي، تتبدد همومي، وأيقن أنكِ أعظم نعمي.",
+                type: "text"
+            },
+            {
+                title: "قَصِيدَةُ الغَرَام",
+                content: "أُحبّكِ حُبّاً لو يَفيضُ يَسيرُهُ<br>عَلى الخَلْقِ مَاتَ الخَلْقُ مِنْ شِدّةِ الحُبِّ<br>أنتِ العُيونُ وتِلْكَ النَّبْضَةُ فِي دَمِي<br>وأنتِ الأَمَانُ وبَلْسَمٌ شَافٍ لِلْقَلْبِ",
+                type: "poem"
+            },
+            {
+                title: "تَفَاصِيلُكِ المُقَدَّسَة",
+                content: "أعشق ضحكتكِ، نبرة صوتكِ العذبة، طريقتكِ اللطيفة، وحتى صمتكِ. كل تفصيلة صغيرة فيكِ تصنع يوماً كاملاً من البهجة لوسيم.",
+                type: "text"
+            },
+            {
+                title: "عَيْنَاكِ مَوْطِنِي",
+                content: "في عينيكِ أرى مدائن من السلام. حين أنظر إليهما، أنسى العالم بأسره، وأغرق في بحر من الطمأنينة لا أريد النجاة منه أبداً.",
+                type: "text"
+            },
+            {
+                title: "شِعْرٌ فِي الحُسْن",
+                content: "يا مَنْ حَوَتْ كُلَّ المَحَاسِنِ وَالبَهَا<br>وَتَفَرَّدَتْ بِالحُسْنِ وَالإِشْرَاقِ<br>لَوْلاَكِ مَا عَرَفَ الفُؤَادُ صَبَابَةً<br>وَلاَ ذَاقَ طَعْمَ الشَّوْقِ فِي الأَعْمَاقِ",
+                type: "poem"
+            },
+            {
+                title: "نَبْضٌ وَاحِد",
+                content: "نحن لسنا روحين في جسدين، بل روح واحدة تعيش في نبضين. إذا تألمتِ، بكت عيناي، وإذا ابتسمتِ، أشرقت دنياي.",
+                type: "text"
+            },
+            {
+                title: "وَقْتِي مَعَكِ",
+                content: "الزمن معكِ يمر كالحلم القصير. أتمنى لو أستطيع إيقاف عقارب الساعة حين أكون بجانبكِ، لأعيش اللحظة معكِ ألف مرة.",
+                type: "text"
+            },
+            {
+                title: "هَمْسَةُ شَوْق",
+                content: "يَكَادُ الشَّوْقُ يَقْتُلُنِي إِلَيْكِ<br>وَكُلُّ جَوَارِحِي تَهْفُو عَلَيْكِ<br>فَأَنْتِ الرُّوحُ، بَلْ أَنْتِ الحَيَاةُ<br>وَمَا عُمْرِي سِوَى لَحْظَةْ لَدَيْكِ",
+                type: "poem"
+            },
+            {
+                title: "مَلِكَةُ القَلْب",
+                content: "توجتكِ ملكةً على عرش قلبي، لا شريك لكِ فيه ولا منازع. أنتِ الحاكمة بأمر الحب، وأنا أسير هواكِ طوعاً واختياراً.",
+                type: "text"
+            },
+            {
+                title: "عَهْدُ الوَفَاء",
+                content: "أعاهدكِ أمام الله وقلبي، أن أكون السند الذي لا يميل. حبنا حبل متين يربط أرواحنا كنسيج واحد لا ينقطع.",
+                type: "text"
+            },
+            {
+                title: "وَعْدُ العِشْق",
+                content: "أَعِدُكِ أَنْ أَبْقَى عَلَى العَهْدِ وَافِياً<br>وَأَنْ أَحْفَظَ الوِدَّ الَّذِي بَيْنَنَا دَهْرَا<br>فَأَنْتِ الرَّجَاءُ وَأَنْتِ المُنَى كُلُّهَا<br>وَأَنْتِ الضِّيَاءُ إِذَا مَا دَجَى أَسْرَى",
+                type: "poem"
+            },
+            {
+                title: "كُلُّ الأَشْيَاءِ أَنْتِ",
+                content: "أنتِ الصباح إذا أشرقت الشمس، وأنتِ القمر إذا حل المساء. أنتِ الفرح في حزني، واليقين في حيرتي، أنتِ ببساطة، كل أشيائي الجميلة.",
+                type: "text"
+            },
+            {
+                title: "نِهَايَةٌ لَا تَنْتَهِي",
+                content: "هذا الكتاب لن تُغلق صفحاته، فكل يوم معكِ هو فصل جديد من العشق. دمتِ لي نبضاً، ودمتُ لكِ عاشقاً مدى الحياة.",
+                type: "text",
+                btnNext: "أعِد القراءة 🔄"
+            }
+        ];
+
+        const container = document.getElementById('pages-container');
+
+        pagesData.forEach((page, index) => {
+            const pageNum = index + 1;
+            const isFirst = index === 0;
+            const isLast = index === pagesData.length - 1;
+            
+            const contentHTML = page.type === 'poem' 
+                ? `<div class="poem-text">${page.content}</div>`
+                : `<p class="content-text">${page.content}</p>`;
+
+            let buttonsHTML = '<div class="btn-group">';
+            if (!isFirst) buttonsHTML += `<button onclick="showPage(${pageNum - 1})">السابق</button>`;
+            
+            const nextBtnText = page.btnNext || 'اقلب الصفحة';
+            const nextAction = isLast ? 1 : pageNum + 1;
+            buttonsHTML += `<button onclick="showPage(${nextAction})">${nextBtnText}</button>`;
+            buttonsHTML += '</div>';
+
+            const html = `
+                <div id="page${pageNum}" class="page ${isFirst ? 'active' : ''}">
+                    <div class="heart-container">
+                        <div class="heart-wrapper">
+                            <svg viewBox="0 0 32 29.6" class="svg-heart"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
+                            <div class="name-text">ريماس</div>
+                        </div>
+                        <div class="rope"></div>
+                        <div class="heart-wrapper">
+                            <svg viewBox="0 0 32 29.6" class="svg-heart"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
+                            <div class="name-text">وسيم</div>
+                        </div>
+                    </div>
+                    <h1>${page.title}</h1>
+                    ${contentHTML}
+                    ${buttonsHTML}
+                    <div class="page-number">صفحة ${pageNum} من ${pagesData.length}</div>
+                </div>
+            `;
+            container.innerHTML += html;
+        });
+
+        function showPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const targetPage = document.getElementById('page' + pageNumber);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
+
