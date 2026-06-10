@@ -133,6 +133,35 @@
             font-family: 'Cairo', sans-serif;
         }
 
+        /* تنسيق ميزة عداد المتواجدين الآن الجديدة في الأسفل */
+        .live-users-counter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .mini-heart {
+            width: 18px;
+            height: 18px;
+            fill: #ff3333;
+            animation: pulse 1.2s infinite ease-in-out;
+            filter: drop-shadow(0 0 5px #ff0000);
+        }
+
+        .user-count-badge {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff3333;
+            padding: 2px 10px;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: bold;
+        }
+
         /* أزرار التحكم والتقليب */
         .btn-group {
             display: flex;
@@ -168,7 +197,7 @@
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.15); }
         }
     </style>
 </head>
@@ -203,7 +232,7 @@
             },
             {
                 title: "تَفَاصِيلُكِ المُقَدَّسَة",
-                content: "أعشق ضحكتكِ, نبرة صوتكِ العذبة، طريقتكِ اللطيفة، وحتى صمتكِ. كل تفصيلة صغيرة فيكِ تصنع يوماً كاملاً من البهجة لوسيم.",
+                content: "أعشق ضحكتكِ، نبرة صوتكِ العذبة، طريقتكِ اللطيفة، وحتى صمتكِ. كل تفصيلة صغيرة فيكِ تصنع يوماً كاملاً من البهجة لوسيم.",
                 type: "text"
             },
             {
@@ -213,7 +242,7 @@
             },
             {
                 title: "شِعْرٌ فِي الحُسْن",
-                content: "يا مَنْ حَوَتْ كُلَّ المَحَاسِنِ وَالبَهَا<br>وَتَفَرَّدَتْ بِالحُسْنِ وَالإِشْرَاقِ<br>لَوْلاَكِ مَا عَرَفَ الفُؤَادُ صَبَابَةً<br>وَلاَ ذَاقَ طَعْمَ الشَّΩْقِ فِي الأَعْمَاقِ",
+                content: "يا مَنْ حَوَتْ كُلَّ المَحَاسِنِ وَالبَهَا<br>وَتَفَرَّدَتْ بِالحُسْنِ وَالإِشْرَاقِ<br>لَوْلاَكِ مَا عَرَفَ الفُؤَادُ صَبَابَةً<br>وَلاَ ذَاقَ طَعْمَ الشَّوْقِ فِي الأَعْمَاقِ",
                 type: "poem"
             },
             {
@@ -353,6 +382,9 @@
             buttonsHTML += `<button onclick="showPage(${nextAction})">${nextBtnText}</button>`;
             buttonsHTML += '</div>';
 
+            // توليد عدد عشوائي ذكي للمتواجدين الآن في نفس اللحظة
+            const randomUsers = Math.floor(Math.random() * (7 - 3 + 1)) + 3;
+
             const html = `
                 <div id="page${pageNum}" class="page ${isFirst ? 'active' : ''}">
                     <div class="heart-container">
@@ -370,6 +402,12 @@
                     ${contentHTML}
                     ${buttonsHTML}
                     <div class="page-number">صفحة ${pageNum} من ${pagesData.length}</div>
+                    
+                    <div class="live-users-counter">
+                        <svg class="mini-heart" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
+                        <span>يتصفح هذا الكتاب الآن:</span>
+                        <span class="user-count-badge">${randomUsers} أشخاص</span>
+                    </div>
                 </div>
             `;
             container.innerHTML += html;
